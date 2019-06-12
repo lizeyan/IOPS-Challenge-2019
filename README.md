@@ -4,7 +4,7 @@
 ## 选手需要准备的内容：
 一个Docker镜像，其中包含了选手的程序和所有需要的环境。
 请将docker镜像通过`docker save ${IMAGE} -o ${队名}.tar`命令保存在虚拟机的`/srv`目录下([docker save命令](https://docs.docker.com/engine/reference/commandline/save/))。
-请保证改镜像有正确的entrypoint
+请保证镜像有正确的entrypoint
 
 ##  选手程序需要做什么
 1. docker container内`/data`路径中，会按时序出现各个时间点的数据。格式和预赛相同，每个时间点对应的数据文件名为`{timestamp}.csv`（例如`1536827700.csv`）。
