@@ -71,7 +71,7 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
                 timestamp, rc_set = match.group("timestamp"), match.group('rc_set')
                 timestamp = int(timestamp)
                 interval = time.time() - send_time[timestamp]
-                logger.info(f"receive: {line}, interval: {interval:.3f}s")
+                logger.info(f"receive: {timestamp},{rc_set}, interval: {interval:.3f}s")
                 if timestamp in send_time and interval <= config['interval']:
                     results.append({
                         'timestamp': timestamp,
