@@ -1,4 +1,5 @@
 import os
+import re
 import signal
 import sys
 import time
@@ -55,6 +56,7 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
             logger.info("sender finished")
 
         def receiver():
+            ret_re = re.compile(r'\s*(?P<timestamp>\d+)\s*,\s*(?P<rc_set>[iecpl\d&;]+)\s*')
             y = select.poll()
             y.register(client.stdout, select.POLLIN)
             while client.poll() is None:
@@ -62,7 +64,11 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
                     line = client.stdout.readline()
                 else:
                     continue
-                timestamp, rc_set = line.rstrip('\n\r').split(",")
+                match = ret_re.match(line)
+                if not match:
+                    logger.info(f"unrecognized line: {line}")
+                    continue
+                timestamp, rc_set = match.group("timestamp"), match.group('rc_set')
                 timestamp = int(timestamp)
                 interval = time.time() - send_time[timestamp]
                 logger.info(f"receive: {line}, interval: {interval:.3f}s")
