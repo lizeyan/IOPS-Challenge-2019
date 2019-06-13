@@ -52,6 +52,8 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
                 print(anomaly_time, file=client.stdin, flush=True)
                 time.sleep(config['interval'])
                 last_time = anomaly_time
+                if client.poll() is not None:
+                    break
             os.killpg(os.getpgid(client.pid), signal.SIGTERM)
             logger.info("sender finished")
 
@@ -82,7 +84,7 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
             pool.submit(sender)
             receiver()
 
-        result_df = pd.DataFrame.from_records(results)
+        result_df = pd.DataFrame.from_records(results, columns=['timestamp', 'set'])
         logger.debug(f"\n{result_df}")
         return result_df
 
@@ -121,7 +123,7 @@ def main(**config):
     ground_truth = pd.read_csv(config['ground_truth'])
     load_docker(config['docker'] / f"{config['team']}.tar")
     results = simulate(ground_truth, config)
-    f1_score = evaluate(results, ground_truth)
+    f1_score = evaluate(ground_truth, results)
     logger.info(f"Final F1-score: {f1_score}")
     raise SystemExit
 
