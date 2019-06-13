@@ -3,5 +3,5 @@
 CONTEXT="$(dirname $(realpath $0))"
 TEAM="example_user"
 echo context: ${CONTEXT}
-docker build ${CONTEXT} -t ${TEAM}
-docker save example_user -o /srv/${TEAM}.tar
+sudo docker build ${CONTEXT} -t ${TEAM}
+sudo docker save example_user -o /srv/${TEAM}.tar

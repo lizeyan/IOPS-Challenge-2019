@@ -63,21 +63,8 @@ def compute_f1(true_set, pred_set):
     return score, TP, FP, FN
 
 
-def root_evaluation(truth_file, result_file):
+def root_evaluation(truth_df, result_df):
     data = {'result': False, 'total_fscore': "", 'message': ""}
-    result_df = None
-    
-    if result_file[-4:] != '.csv':
-        data['message'] = "提交的文件必须是csv格式"
-        return json.dumps(data, ensure_ascii=False)
-    else:
-        result_df = pd.read_csv(result_file, engine='python', delimiter='\s*,\s*')
-
-    if 'timestamp' not in result_df.columns or 'set' not in result_df.columns:
-        data['message'] = "提交的文件必须包含'timestamp', 'set'两列，您的输入为{}".format(result_df.columns)
-        return json.dumps(data, ensure_ascii=False)
-
-    truth_df = pd.read_csv(truth_file)
     timestamps = np.unique(truth_df['timestamp'].values)
 
     f1_scores = []
@@ -88,10 +75,10 @@ def root_evaluation(truth_file, result_file):
     for timestamp in timestamps:  # for each anomaly moment, compute its f1_score
 
         truth = truth_df[truth_df["timestamp"] == timestamp]
-        true_set = reconstruct_set(timestamp, str(truth.iloc[0][1]).strip())
+        true_set = reconstruct_set(timestamp, str(truth.iloc[0]['set']).strip())
         if timestamp not in result_df["timestamp"].values:
-            data['message'] = "提交的文件缺少timestamp %s 的结果" % timestamp
-            return json.dumps(data, ensure_ascii=False)
+            total_FN += len(true_set)
+            continue
 
         result = result_df[result_df["timestamp"] == timestamp]
 
@@ -119,9 +106,4 @@ def root_evaluation(truth_file, result_file):
     data['data'] = round(score, 4)
     data['message'] = '计算成功'
 
-    return json.dumps(data, ensure_ascii=False)
-
-
-if __name__ == '__main__':
-    _, truth_file, result_file = argv
-    print(root_evaluation(truth_file, result_file))
+    return data
