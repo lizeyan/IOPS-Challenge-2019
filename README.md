@@ -14,6 +14,7 @@
 - Docker镜像的名字请设定为队名，和tar文件的名字也需一致
 - 请保证镜像有正确的entrypoint
 - 可以参考example_user中的写法
+- 请自行利用`run.py`测试，确保符合规范。决赛过程中出现问题后果自负。
 
 ##  选手程序需要做什么
 1. docker container内`/data`路径中，会按时序出现各个时间点的数据。格式和预赛相同，每个时间点对应的数据文件名为`{timestamp}.csv`（例如`1536827700.csv`）。
@@ -63,3 +64,12 @@ Options:
   --log PATH            log file parent path
   --help                Show this message and exit.
 ```
+
+以下是运行`example_user`的样例:
+```bash
+cd example_user
+bash build_docker.sh
+cd ..
+python run.py --team example_user --ground-truth unittest_files/ground_truth.csv --data unittest_files/data/ --interval 2
+```
+输出的F1-score应当为1.0
