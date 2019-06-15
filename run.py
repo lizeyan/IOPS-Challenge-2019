@@ -15,6 +15,7 @@ from tempfile import TemporaryDirectory
 from evaluation_d4 import root_evaluation
 from concurrent.futures import ThreadPoolExecutor
 import select
+from shutil import copyfile
 
 
 def load_docker(docker_tar_path: Path):
@@ -45,7 +46,7 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
             for anomaly_time in sorted(anomaly_timestamps):
                 logger.info(f"send {anomaly_time}")
                 list(map(
-                    lambda x: os.symlink(str(data_path / f"{x}.csv"), f"{temp_data}/{x}.csv"),
+                    lambda x: copyfile(str(data_path / f"{x}.csv"), f"{temp_data}/{x}.csv"),
                     all_timestamps[(all_timestamps <= anomaly_time) & (all_timestamps > last_time)]
                 ))
                 send_time[int(anomaly_time)] = time.time()
