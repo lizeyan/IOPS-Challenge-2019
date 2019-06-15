@@ -92,11 +92,9 @@ def root_evaluation(truth_df, result_df):
         total_FP += FP
         total_FN += FN
         f1_scores.append(f1_score)
-        print(timestamp, total_TP, total_FP, total_FN)
     Precision = 0.0
     Recall = 0.0
     score = 0.0
-    print(total_FN, total_FP, total_TP)
     if total_TP > 0:
         Precision = total_TP / (total_TP + total_FP)
         Recall = total_TP / (total_TP + total_FN)
