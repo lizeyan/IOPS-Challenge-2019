@@ -64,9 +64,9 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
             y.register(client.stdout, select.POLLIN)
             while client.poll() is None:
                 if y.poll(1):
-                    logger.debug('try reading')
+                    # logger.debug('try reading')
                     line = client.stdout.readline()
-                    logger.debug(f"original {line}")
+                    # logger.debug(f"original {line}")
                 else:
                     continue
                 match = ret_re.match(line)
