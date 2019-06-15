@@ -27,10 +27,10 @@
 2. 在异常数据到来的时候，向选手程序的stdin写入一行，内容为发生异常的时间戳。
 3. 接受选手程序输出的按规定格式的根因结果。只有在后续时间点数据出现之前的结果才有效，否则会被直接忽略。
 4. 每个选手程序拥有的计算资源
-8 Cores，64GB RAM，200GB Storage
+8 Cores，64GB RAM，~~200GB Storage~~
 选手的Docker镜像将会通过以下参数启动Container：
 ``` bash
-docker run -i --cpu=<cpu-limit> --memory=<memory-limit> --storage-opt size=<storage-limit> -v <data-path>:/data --ipc=private <container-name>
+docker run -i --cpu=<cpu-limit> --memory=<memory-limit> -v <data-path>:/data --ipc=private <container-name>
 ```
 
 
