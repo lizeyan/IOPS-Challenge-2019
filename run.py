@@ -31,7 +31,7 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
     assert np.all(np.isin(anomaly_timestamps, all_timestamps)), "data do not contain all anomalies"
     with TemporaryDirectory() as temp_data:
         client = Popen(
-            f"docker run -i --rm --cpus={config['cpu_limit']} "
+            f"sudo docker run -i --rm --cpus={config['cpu_limit']} "
             f"--memory={config['memory_limit']} "
             f"-v {temp_data}:/data --ipc=private {image_name}",
             shell=True, stdin=PIPE, stdout=PIPE, universal_newlines=True, bufsize=0,
