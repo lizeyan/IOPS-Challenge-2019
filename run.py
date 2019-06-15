@@ -29,7 +29,7 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
     anomaly_timestamps = ground_truth.timestamp.values
     all_timestamps = np.asarray([int(str(_.name).rstrip('.csv')) for _ in data_path.glob("*.csv")])
     assert np.all(np.isin(anomaly_timestamps, all_timestamps)), "data do not contain all anomalies"
-    with TemporaryDirectory() as temp_data:
+    with TemporaryDirectory(prefix='/tmp/') as temp_data:
         client = Popen(
             f"sudo docker run -i --rm --cpus={config['cpu_limit']} "
             f"--memory={config['memory_limit']} "
@@ -54,7 +54,8 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
                 last_time = anomaly_time
                 if client.poll() is not None:
                     break
-            os.killpg(os.getpgid(client.pid), signal.SIGTERM)
+            logger.info(f"send signal {signal.SIGKILL}")
+            os.killpg(os.getpgid(client.pid), signal.SIGKILL)
             logger.info("sender finished")
 
         def receiver():
@@ -63,7 +64,9 @@ def simulate(ground_truth: pd.DataFrame, config: dict):
             y.register(client.stdout, select.POLLIN)
             while client.poll() is None:
                 if y.poll(1):
+                    logger.debug('try reading')
                     line = client.stdout.readline()
+                    logger.debug(f"original {line}")
                 else:
                     continue
                 match = ret_re.match(line)

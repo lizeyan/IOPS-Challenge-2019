@@ -1,5 +1,8 @@
 .idea/deployment.xml
 .idea/webServers.xml
+Pipfile.lock
+.idea/other.xml
+.idea/inspectionProfiles/
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template
@@ -240,3 +243,4 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 
+/Pipfile.lock
