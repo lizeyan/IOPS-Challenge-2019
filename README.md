@@ -35,7 +35,7 @@ docker run -i --cpu=<cpu-limit> --memory=<memory-limit> -v <data-path>:/data --i
 
 
 ## 使用方法
-0. 确保你有`root`权限，或者可以不需密码执行`sudo`命令。实际的决赛环境中会直接使用`root`用户。
+0. 确保你有`root`权限，或者可以不需密码执行`sudo`命令。实际的决赛环境中会直接使用`root`用户。另外确保你使用的python和pip都是至少**python3.6**版本。
 1. 安装pipenv，参考[https://github.com/pypa/pipenv](https://github.com/pypa/pipenv)
 2. 安装依赖环境
 ``` bash
